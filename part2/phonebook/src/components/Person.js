@@ -1,14 +1,9 @@
 import React from 'react'
 
-const Person = ({personList}) => {
+const Person = ({person}) => {
     return (
         <div>
-            { personList.map((person) => {
-                    return <b key={person.name}>
-                        {person.name} {person.number}<br/>
-                        </b>
-                })
-            }
+            <b>{person.name} {person.number}</b>
         </div>
     )
 }

@@ -1,5 +1,7 @@
 import { useState } from 'react'
-import Person from './components/Person'
+import PersonList from './components/PersonList'
+import InputField from './components/InputField'
+import PersonForm from './components/PersonForm'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -11,7 +13,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [personDisplay, setPersonDisplay] = useState(persons)
-  const [filerName, setFilerName] = useState('')
+  const [filterName, setFilterName] = useState('')
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -31,6 +33,7 @@ const App = () => {
 
       setNewName('')
       setNewNumber('')
+      setFilterName('')
     }
   }
 
@@ -43,42 +46,35 @@ const App = () => {
   }
 
   const handleFilterNameAddition = (event) => {
-    setFilerName(event.target.value)
+    setFilterName(event.target.value)
     if (event.target.value === '') {
       setPersonDisplay(persons)
     } else {
-      setPersonDisplay(persons.filter((element) => {return element.name.toLowerCase().includes(event.target.value.toLowerCase())}))
+      setPersonDisplay(persons.filter((element) => {
+          return element.name.toLowerCase().includes(
+            event.target.value.toLowerCase())
+        }))
     }
+  }
+
+  const personFormObj = {
+    add: addPerson,
+    nameDispText: 'Name: ',
+    name: newName,
+    nameChangeHdl: handleNameAddition,
+    numDispText: 'Number: ',
+    number: newNumber,
+    numChangeHdl: handleNumberAddition
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-          filter shown with <input
-                              value={filerName}
-                              onChange={handleFilterNameAddition}/>
-        </div>
-      <h2>Add a new</h2>
-      <form onSubmit={addPerson}>
-        <div>
-          name: <input 
-                  value={newName}
-                  onChange={handleNameAddition}
-                />
-        </div>
-        <div>
-          number: <input
-                  value={newNumber}
-                  onChange={handleNumberAddition}
-                />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
-      <Person personList={personDisplay}/>
+      <InputField dispText={'Filter shown with'} stateVar={filterName} changeHdl={handleFilterNameAddition}/>
+      <h3>Add a new</h3>
+      <PersonForm personFormObj={personFormObj}/>
+      <h3>Numbers</h3>
+      <PersonList personList={personDisplay}/>
     </div>
   )
 }

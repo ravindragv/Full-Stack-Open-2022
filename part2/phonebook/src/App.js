@@ -8,10 +8,16 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
-    const personArrayElem = {
-      name: newName,
+
+    // Check if the person exists in the phonebook, if no add person
+    if (persons.some((element) => {return element.name === newName})) {
+      window.alert(`${newName} already exists in the Phonebook`)
+    } else {
+      const personArrayElem = {
+        name: newName,
+      }
+      setPersons(persons.concat(personArrayElem))
     }
-    setPersons(persons.concat(personArrayElem))
   }
 
   const handleNameAddition = (event) => {

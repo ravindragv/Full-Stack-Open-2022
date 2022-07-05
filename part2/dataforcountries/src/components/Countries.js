@@ -14,7 +14,7 @@ const Countries = ({countries}) => {
     }
 
     if (countries.length === 1) {
-        return (<Country country={countries[0]}/>)
+        return (<Country country={countries[0]} showWeather={true}/>)
     } else if (countries.length > 10) {
         return (<div>Too many matches, specify another filter</div>)
     }
@@ -25,7 +25,7 @@ const Countries = ({countries}) => {
                 <div key={element.cca3}>
                     {element.name.common}
                     <button onClick={() => handleShow(i)}>{visibility[i]? 'Hide' : 'Show'}</button>
-                    {visibility[i] && <Country country={countries[i]}/>}
+                    {visibility[i] && <Country country={countries[i]} showWeather={false}/>}
                 </div>
             )}
         </div>

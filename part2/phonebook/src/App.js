@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import PersonList from './components/PersonList'
 import InputField from './components/InputField'
 import PersonForm from './components/PersonForm'
+import phoneBookService from './services/phoneBookService'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -23,9 +23,14 @@ const App = () => {
         number: newNumber,
         id: persons.length + 1
       }
-      const newPersonList = persons.concat(personArrayElem)
-      setPersons(newPersonList)
-      setPersonDisplay(newPersonList)
+
+      phoneBookService
+      .create(personArrayElem)
+      .then(person => {
+        const newPersonList = persons.concat(person)
+        setPersons(newPersonList)
+        setPersonDisplay(newPersonList)
+      })
 
       setNewName('')
       setNewNumber('')
@@ -64,11 +69,11 @@ const App = () => {
   }
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
-        setPersonDisplay(response.data)
+      phoneBookService
+      .getAll()
+      .then(personList => {
+        setPersons(personList)
+        setPersonDisplay(personList)
       })
   }, [])
 

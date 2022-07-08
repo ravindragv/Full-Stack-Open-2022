@@ -82,11 +82,13 @@ const App = () => {
   }, [])
 
   const handlePersonDelete = (personName) => {
-    phoneBookService
-    .deletePerson(personName)
-    .then(response => {
-      setPersonLists()
-    })
+    if (window.confirm(`Do you really want to delete ${personName}`)) {
+      phoneBookService
+      .deletePerson(personName)
+      .then(response => {
+        setPersonLists()
+      })
+    }
   }
 
   return (

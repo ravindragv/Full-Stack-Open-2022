@@ -16,7 +16,16 @@ const App = () => {
 
     // Check if the person exists in the phonebook, if no add person
     if (persons.some((element) => {return element.name === newName})) {
-      window.alert(`${newName} already exists in the Phonebook`)
+      if (window.confirm(`${newName} is already added to Phonebook, replace old number with a new one?`)) {
+        let personChange = persons.find((element) => element.name === newName)
+        personChange.number = newNumber
+
+        phoneBookService
+        .updatePerson(personChange)
+        .then(response => {
+          setPersonLists()
+        })
+      }
     } else {
       const personArrayElem = {
         name: newName,

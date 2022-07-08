@@ -68,14 +68,26 @@ const App = () => {
     numChangeHdl: handleNumberAddition
   }
 
+  const setPersonLists = () => {
+    phoneBookService
+    .getAll()
+    .then(personList => {
+      setPersons(personList)
+      setPersonDisplay(personList)
+    })
+  }
+
   useEffect(() => {
-      phoneBookService
-      .getAll()
-      .then(personList => {
-        setPersons(personList)
-        setPersonDisplay(personList)
-      })
+    setPersonLists()
   }, [])
+
+  const handlePersonDelete = (personName) => {
+    phoneBookService
+    .deletePerson(personName)
+    .then(response => {
+      setPersonLists()
+    })
+  }
 
   return (
     <div>
@@ -84,7 +96,7 @@ const App = () => {
       <h3>Add a new</h3>
       <PersonForm personFormObj={personFormObj}/>
       <h3>Numbers</h3>
-      <PersonList personList={personDisplay}/>
+      <PersonList personList={personDisplay} deleteHdl={handlePersonDelete}/>
     </div>
   )
 }

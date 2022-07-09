@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import PersonList from './components/PersonList'
 import InputField from './components/InputField'
 import PersonForm from './components/PersonForm'
+import Notification from './components/Notification'
 import phoneBookService from './services/phoneBookService'
 
 const App = () => {
@@ -10,6 +11,16 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [personDisplay, setPersonDisplay] = useState(persons)
   const [filterName, setFilterName] = useState('')
+  const [message, setMessage] = useState(null)
+  const [msgType, setMsgType] = useState('')
+
+  const showMsg = (msg, msgType) => {
+    setMsgType(msgType)
+    setMessage(msg)
+    setTimeout(() => {
+      setMessage(null)
+    }, 5000)
+  }
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -25,6 +36,9 @@ const App = () => {
         .then(response => {
           setPersonLists()
         })
+        .catch(error => {
+          showMsg(`Information of ${newName} has already been removed from server`, 'error')
+        })
       }
     } else {
       const personArrayElem = {
@@ -36,6 +50,7 @@ const App = () => {
       phoneBookService
       .create(personArrayElem)
       .then(person => {
+        showMsg(`Added ${person.name}`, 'success')
         const newPersonList = persons.concat(person)
         setPersons(newPersonList)
         setPersonDisplay(newPersonList)
@@ -103,6 +118,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} msgType={msgType}/>
       <InputField dispText={'Filter shown with'} stateVar={filterName} changeHdl={handleFilterNameAddition}/>
       <h3>Add a new</h3>
       <PersonForm personFormObj={personFormObj}/>
